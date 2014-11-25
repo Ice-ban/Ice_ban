@@ -16,9 +16,6 @@ fi
 while read ip; do
   temp=$(geoiplookup $(echo $ip | awk 'BEGIN {FS="/"}{print $1}') | awk '{print $4}')
 
-  # debugging line
-  # echo $ip " - " $temp
-
 # ignore regions you wish not to permaban
   case "$temp" in
     "US,") 
