@@ -2391,7 +2391,8 @@
 188.158.192.0/19
 212.80.20.0/23
 
-# US Businesses that allocate IPs to foriegn countries
+# US Businesses that allocate IPs to other countries
+# Please ignore errors raised by validate due to bugs in geolookup
 70.84.0.0/14
 174.132.0.0/15
 192.34.108.0/22
