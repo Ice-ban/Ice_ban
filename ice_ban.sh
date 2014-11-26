@@ -1,10 +1,13 @@
 #!/bin/bash
 
+# create temp file for processing
+file=mktemp
+
 # read black list and remove text, comments and blank lines; also remove duplicates
-cat ip.blacklist | grep -Ev "[[:alpha:]]" | grep -Ev "#" | grep -e '^$' -v | sort | uniq > temp.hammer
+cat ip.blacklist | grep -Ev "[[:alpha:]]" | grep -Ev "#" | grep -e '^$' -v | sort | uniq > $file
 
 # stop if done
-if [ -s temp.hammer ]
+if [ -s $file ]
 then
   echo "Found IPs that should be banned."
 else
@@ -16,8 +19,8 @@ fi
 while read ip; do
   echo "banning: "$ip
   sudo iptables -A INPUT -s $ip -j DROP
-done <temp.hammer
+done <$file
 
 # final clean up
-rm temp.hammer
+rm $file
 
