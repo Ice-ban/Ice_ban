@@ -19,17 +19,24 @@ while read ip; do
 # Alert regions you wish not to permaban
   case "$temp" in
     "US,") 
-      echo "WARNING US IP: " $ip
+      echo -ne "\nWARNING US IP: " $ip
+      bool="true"
       ;;
     "CA,")
-      echo "WARNING Canada IP: " $ip
+      echo -ne "\nWARNING Canada IP: " $ip "\n"
       ;;
 # all others are fair game for banishment
     *)
+      if [[ "$bool" == "true" ]]
+      then
+        echo -ne "\n"
+      fi
       echo -n "."
+      bool="false"
       ;;
     esac
 done <temp.hammer
 
 # clean up
 rm temp.hammer
+echo -ne "\nDONE\n"
