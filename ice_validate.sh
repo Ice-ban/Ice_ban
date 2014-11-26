@@ -1,10 +1,13 @@
 #!/bin/bash
 
+# use temp file for processing
+file=mktemp
+
 # read black list and remove text, comments and blank lines; also remove duplicates
-cat ip.blacklist | grep -Ev "[[:alpha:]]" | grep -Ev "#" | grep -e '^$' -v | sort | uniq > temp.hammer
+cat ip.blacklist | grep -Ev "[[:alpha:]]" | grep -Ev "#" | grep -e '^$' -v | sort | uniq > $file
 
 # stop if Empty List ERROR
-if [ -s temp.hammer ]
+if [ -s $file ]
 then
   echo "Found IPs To Examine"
 else  
@@ -35,8 +38,8 @@ while read ip; do
       bool="false"
       ;;
     esac
-done <temp.hammer
+done <$file
 
 # clean up
-rm temp.hammer
+rm $file
 echo -ne "\nDONE\n"
