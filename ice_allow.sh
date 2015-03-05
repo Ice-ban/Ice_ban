@@ -38,7 +38,6 @@ while read ip; do
    sudo iptables -A INPUT -s $ip -j ACCEPT
 done <$ip6
 
-
 # final clean up
 rm $file $ip4 $ip6
 
