@@ -1,10 +1,14 @@
 #!/bin/bash
 
 # create temp file for processing
-file=mktemp
+file=$(mktemp)
+ip4=$(mktemp)
+ip6=$(mktemp)
 
 # read black list and remove text, comments and blank lines; also remove duplicates
 grep -Ev "[[:alpha:]]" ip.whitelist | grep -Ev "#" | grep -e '^$' -v | sort -h | uniq > $file
+grep -Ev ":" $file > $ip4
+grep -E ":" $file > $ip6
 
 # stop if done
 if [ -s $file ]
@@ -20,13 +24,21 @@ fi
 
 # Default Policy to DROP all incoming traffic
 sudo iptables -P INPUT DROP
+sudo ip6tables -P INPUT DROP
 
-# nuke the IPs we have selected for elimination
+# Allow the IP4s we have selected
 while read ip; do
   echo "Allowing: "$ip
   sudo iptables -A INPUT -s $ip -j ACCEPT
-done <$file
+done <$ip4
+
+# Allow the IP6s we have selected
+while read ip; do
+   echo "Allowing: "$ip
+   sudo iptables -A INPUT -s $ip -j ACCEPT
+done <$ip6
+
 
 # final clean up
-rm $file
+rm $file $ip4 $ip6
 
