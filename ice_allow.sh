@@ -35,7 +35,7 @@ done <$ip4
 # Allow the IP6s we have selected
 while read ip; do
    echo "Allowing: "$ip
-   sudo iptables -A INPUT -s $ip -j ACCEPT
+   sudo ip6tables -A INPUT -s $ip -j ACCEPT
 done <$ip6
 
 # final clean up
